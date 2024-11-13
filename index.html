@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie Clicker</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
-    
+    <div class="w-screen h-screen flex">
+        <div class="flex flex-col flex-1 bg-green-500 justify-center items-center">
+            <p class="text-3xl font-bold" id="cookie_counter">0 Cookies</p>
+            <p class="text-3xl font-bold" id="cookie_per_second">Y cookies par seconde</p>
+            <img id="cookie_image" src="assets/cookie.png" class="h-80 mt-20 hover:h-96 cursor-pointer transition-all duration-300" alt="Image de cookie" >
+        </div>
+        <div class="flex flex-col flex-1 bg-yellow-500"></div>
+        <div class="flex flex-col flex-1 bg-red-500"></div>
+    </div>
 </body>
 </html>
