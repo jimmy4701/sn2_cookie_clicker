@@ -91,7 +91,7 @@ function initializeGame () {
     
     refreshShop()
     refreshCPS()
-    changeCounterTag(total_cookie)
+    refreshCookies(total_cookie)
 
 }
 
@@ -100,17 +100,16 @@ function resetGame() {
     localStorage.removeItem('saved_shop')
     total_cookie = 0
     total_cps = 0
-    changeCounterTag(0)
     initializeGame()
 }
 
-function changeCounterTag (value) {
-    cookie_counter_tag.innerText = total_cookie + " cookies"
+function refreshCookies (value) {
+    cookie_counter_tag.innerText = Math.round(total_cookie) + " cookies"
 }
 
 function incrementCookies (cookies_to_add) {
     total_cookie += cookies_to_add
-    changeCounterTag(total_cookie)
+    refreshCookies(total_cookie)
     localStorage.setItem('saved_cookies', total_cookie)
 }
 
@@ -118,3 +117,8 @@ function incrementCookies (cookies_to_add) {
 initializeGame()
 cookie_image.addEventListener('click', () => { incrementCookies(1) } )
 reset_button.addEventListener('click', resetGame)
+
+setInterval(() => {
+    total_cookie += (total_cps / 10)
+    refreshCookies(total_cookie)
+}, 100)
