@@ -16,13 +16,14 @@ const reset_button = document.getElementById('reset-button')
 function handleShopClick ( item ) {
 
     if(item.price > total_cookie){
-        alert(`🤔 Vous êtes pauvres !`)
+        alert(`🤔 Vous êtes pauvre !`)
         return
     }
 
     let index = shop.findIndex(o =>  o.id == item.id)
-    shop[index].total += 1
     total_cookie -= item.price
+    shop[index].total += 1
+    shop[index].price = Math.round(shop[index].price * 1.4)
     localStorage.setItem('saved_shop', JSON.stringify(shop))
     refreshShop()
     refreshCPS()
@@ -118,6 +119,5 @@ cookie_image.addEventListener('click', () => { incrementCookies(1) } )
 reset_button.addEventListener('click', resetGame)
 
 setInterval(() => {
-    total_cookie += (total_cps / 10)
-    refreshCookies(total_cookie)
+    incrementCookies(total_cps / 10)
 }, 100)
