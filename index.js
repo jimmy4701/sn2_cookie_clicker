@@ -1,6 +1,7 @@
 // Global variables
 let total_cookie = 0 
 let cookies_per_second = 0
+let total_cps = 0
 
 let shop = []
 
@@ -9,6 +10,7 @@ let shop = []
 const cookie_image = document.getElementById('cookie_image')
 const cookie_counter_tag = document.getElementById('cookie_counter')
 const shop_tag = document.getElementById('shop-container')
+const cookie_per_second_tag = document.getElementById('cookie_per_second')
 
 // Functions
 
@@ -17,6 +19,15 @@ function handleShopClick ( item ) {
     shop[index].total += 1
     localStorage.setItem('saved_shop', JSON.stringify(shop))
     refreshShop()
+}
+
+function refreshCPS() {
+    let total = 0
+    shop.forEach(item => {
+        total += item.total * item.cps
+    })
+    total_cps = total
+    cookie_per_second_tag.innerText = `${total_cps} cookies par seconde`
 }
 
 function refreshShop() {
@@ -32,7 +43,7 @@ function refreshShop() {
 
         let itemImage = document.createElement('img')
         itemImage.src = item.image_url
-        itemImage.classList = ['rounded-full h-10']
+        itemImage.classList = ['rounded-full h-20 w-20']
 
         let itemName = document.createElement('span')
         itemName.innerText = item.title
