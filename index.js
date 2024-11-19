@@ -2,10 +2,7 @@
 let total_cookie = 0 
 let cookies_per_second = 0
 
-let shop = [
-    {id: "mamy", title: "Mamy", price: 10, cps: 1, image_url: "https://www.lavieapreslamort.com/wp-content/uploads/2017/10/Grand-mere-Instragram.jpg", total: 0},
-    {id: "farm", title: "Ferme", price: 10, cps: 1, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
-]
+let shop = []
 
 
 // DOM elements
@@ -18,6 +15,7 @@ const shop_tag = document.getElementById('shop-container')
 function handleShopClick ( item ) {
     let index = shop.findIndex(o =>  o.id == item.id)
     shop[index].total += 1
+    localStorage.setItem('saved_shop', JSON.stringify(shop))
     refreshShop()
 }
 
@@ -59,13 +57,23 @@ function refreshShop() {
 }
 
 function initializeGame () {
-    const saved = localStorage.getItem('saved_cookies')
+    const saved_cookies = localStorage.getItem('saved_cookies')
+    const saved_shop = localStorage.getItem('saved_shop')
+
+    if(!saved_shop){
+        shop = [
+            {id: "mamy", title: "Mamy", price: 10, cps: 1, image_url: "https://www.lavieapreslamort.com/wp-content/uploads/2017/10/Grand-mere-Instragram.jpg", total: 0},
+            {id: "farm", title: "Ferme", price: 10, cps: 1, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
+        ]
+    } else {
+        shop = JSON.parse(saved_shop)
+    }
     
-    if(!saved) {
+    if(!saved_cookies) {
         localStorage.setItem('saved_cookies', 0)
         total_cookie = 0
     } else {
-        total_cookie = parseInt(saved)
+        total_cookie = parseInt(saved_cookies)
     }
 
     refreshShop()
