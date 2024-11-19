@@ -11,19 +11,21 @@ const cookie_image = document.getElementById('cookie_image')
 const cookie_counter_tag = document.getElementById('cookie_counter')
 const shop_tag = document.getElementById('shop-container')
 const cookie_per_second_tag = document.getElementById('cookie_per_second')
+const reset_button = document.getElementById('reset-button')
 
 // Functions
-
 function handleShopClick ( item ) {
     let index = shop.findIndex(o =>  o.id == item.id)
     shop[index].total += 1
     localStorage.setItem('saved_shop', JSON.stringify(shop))
     refreshShop()
+    refreshCPS()
 }
 
 function refreshCPS() {
     let total = 0
-    shop.forEach(item => {
+
+    shop?.forEach(item => {
         total += item.total * item.cps
     })
     total_cps = total
@@ -34,7 +36,7 @@ function refreshShop() {
 
     shop_tag.innerHTML = null
     
-    shop.forEach((item) => {
+    shop?.forEach((item) => {
         let newDomElement = document.createElement('div')
         newDomElement.classList = ['bg-white rounded p-3 flex justify-between cursor-pointer hover:bg-blue-200 transition-all duration-300']
         
@@ -74,7 +76,7 @@ function initializeGame () {
     if(!saved_shop){
         shop = [
             {id: "mamy", title: "Mamy", price: 10, cps: 1, image_url: "https://www.lavieapreslamort.com/wp-content/uploads/2017/10/Grand-mere-Instragram.jpg", total: 0},
-            {id: "farm", title: "Ferme", price: 10, cps: 1, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
+            {id: "farm", title: "Ferme", price: 10, cps: 10, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
         ]
     } else {
         shop = JSON.parse(saved_shop)
@@ -86,8 +88,20 @@ function initializeGame () {
     } else {
         total_cookie = parseInt(saved_cookies)
     }
-
+    
     refreshShop()
+    refreshCPS()
+    changeCounterTag(total_cookie)
+
+}
+
+function resetGame() {
+    localStorage.removeItem('saved_cookies')
+    localStorage.removeItem('saved_shop')
+    total_cookie = 0
+    total_cps = 0
+    changeCounterTag(0)
+    initializeGame()
 }
 
 function changeCounterTag (value) {
@@ -102,5 +116,5 @@ function incrementCookies (cookies_to_add) {
 
 // Main
 initializeGame()
-changeCounterTag(total_cookie)
 cookie_image.addEventListener('click', () => { incrementCookies(1) } )
+reset_button.addEventListener('click', resetGame)
