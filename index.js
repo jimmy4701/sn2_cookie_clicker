@@ -5,7 +5,6 @@ let total_cps = 0
 
 let shop = []
 
-
 // DOM elements
 const cookie_image = document.getElementById('cookie_image')
 const cookie_counter_tag = document.getElementById('cookie_counter')
@@ -15,8 +14,15 @@ const reset_button = document.getElementById('reset-button')
 
 // Functions
 function handleShopClick ( item ) {
+
+    if(item.price > total_cookie){
+        alert(`🤔 Vous êtes pauvres !`)
+        return
+    }
+
     let index = shop.findIndex(o =>  o.id == item.id)
     shop[index].total += 1
+    total_cookie -= item.price
     localStorage.setItem('saved_shop', JSON.stringify(shop))
     refreshShop()
     refreshCPS()
@@ -37,27 +43,20 @@ function refreshShop() {
     shop_tag.innerHTML = null
     
     shop?.forEach((item) => {
-        let newDomElement = document.createElement('div')
-        newDomElement.classList = ['bg-white rounded p-3 flex justify-between cursor-pointer hover:bg-blue-200 transition-all duration-300']
+        let content = `
+            <div class="bg-white rounded p-3 flex justify-between cursor-pointer hover:bg-blue-200 transition-all duration-300">
+                <div class="flex items-center gap-3">
+                    <img src="${item.image_url}" class="rounded-full h-20 w-20">
+                    <span class="font-bold">${item.title}</span>
+                    <span>${item.price} cookies</span>
+                </div>
+                <span>${item.total}</span>
+            </div>
+        `
         
-        let leftPart = document.createElement('div')
-        leftPart.classList = ['flex items-center gap-3']
-
-        let itemImage = document.createElement('img')
-        itemImage.src = item.image_url
-        itemImage.classList = ['rounded-full h-20 w-20']
-
-        let itemName = document.createElement('span')
-        itemName.innerText = item.title
-
-        let itemTotal = document.createElement('span')
-        itemTotal.innerText = item.total
-
-        newDomElement.appendChild(leftPart)
-        newDomElement.appendChild(itemTotal)
-
-        leftPart.appendChild(itemImage)
-        leftPart.appendChild(itemName)
+        let newDomElement = document.createElement('div')
+        newDomElement.innerHTML = content
+        
 
         shop_tag.appendChild(newDomElement)
 
@@ -76,7 +75,7 @@ function initializeGame () {
     if(!saved_shop){
         shop = [
             {id: "mamy", title: "Mamy", price: 10, cps: 1, image_url: "https://www.lavieapreslamort.com/wp-content/uploads/2017/10/Grand-mere-Instragram.jpg", total: 0},
-            {id: "farm", title: "Ferme", price: 10, cps: 10, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
+            {id: "farm", title: "Ferme", price: 100, cps: 10, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK_gP3iZMoqN0wgz1A3CYCo5bVvEyHJdmZRg&s", total: 0},
         ]
     } else {
         shop = JSON.parse(saved_shop)
